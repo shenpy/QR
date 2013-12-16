@@ -1,0 +1,140 @@
+<html>
+    <head>
+        <script src="{{ STATIC_URL }}js/jquery-1.10.2.min.js"></script>
+        <script src="/static/js/ui-bootstrap-custom-0.7.0.js"></script>
+
+        <title>{% block title %}{% endblock title %}</title>
+
+    </head>
+    <body>
+        <div class='head'>
+            <div class="navbar">
+                <ul>
+                    <li><a href='{% url 'index' %}'>首页</a></li>
+                    <li><a  href="javascript:void(0)" class='askquestion'>ask</a></li>
+                {% if  user.is_authenticated %}
+                <li><a {% if is_me %}class='is-my-space'{% endif %} href='{% url 'users-user' user.id %}'>{{ user.username }}</a></li>
+                    <li><a href='{% url 'users-logout' %}'>退出 </a></li>
+                {% else %}
+                    <li><a href='{% url 'users-login' %}'>登录 </a></li>
+                    <li><a href='{% url 'users-signup' %}'>注册</a></li>
+                {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <div class='container'>
+            <div class='content'>
+        {% block content %}
+
+        {% endblock %}
+            </div>
+        </div>
+    </body>
+
+</html>
+<style type="text/css">
+    body {
+        margin: 0px;
+        padding: 0px;
+        background-color: d7d7d7;
+    }
+    h1 {
+        color: 808080;
+    }
+    .container {
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .head {
+        width: 100%;
+        text-align: center;
+        background-color: gray;
+    }
+    .navbar {
+        margin: 0 auto;
+        width: 960px;
+        height: 50px;
+        background-color: gray;
+    }
+    .navbar  a {
+        float:left;
+        width:150px;
+        height:50px;
+        background-color: gray;
+        text-align:center;
+        color: white;
+        text-decoration: none;
+        font-size: 24px;
+        font-weight: bold;
+        line-height: 50px;
+    }
+    .navbar a:hover {
+        background: #363636;
+    }
+    li {
+        list-style-type: none;
+    }
+    a {
+        text-decoration: none;
+        color: 363636;
+        font-size: 22;
+        font-weight: bold;
+    }
+    .userform {
+        top: 120px;
+        position : relative;
+        width: 320px;
+        box-shadow: 0px 0px 40px 1px white;
+        box-radius: 15px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    .userform form {
+        width: 300px;
+        margin: 0 auto;
+    }
+    .container form {
+        width: 300px;
+        margin: 0 auto;
+    }
+    .errorlist li {
+        color: red;
+    }
+    form input {
+        float:right;
+    }
+    .datetime {
+        color: gray;
+        font-size: 16px;
+    }
+    .content {
+        width: 960px;
+        margin: 0 auto;
+    }
+    .is-my-space {
+        color: 00b2bf !important;
+    }
+</style>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+
+$('.askquestion').click(function() {
+    $.ajax({
+	type : "get",
+	url : '/question/new/',
+	dataType : "html",
+	success: function(data) {
+	    //alert( $(data).find('#test').html() ); // returns null
+            $(".container").html($(data).html());
+        },
+	error : function() {
+	    alert("Sorry, The requested property could not be found.");
+	}
+    });
+
+});
+});
+</script>

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}
+    Login | 问答系统
+{% endblock %}
+{% block content %}
+<div class='userform'>
+    <form action="." method="post">{% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" value="login">
+    </form>
+</div>
+<style type='text/css'>
+
+</style>
+
+{% endblock %}

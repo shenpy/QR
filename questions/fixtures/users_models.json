@@ -1,0 +1,35 @@
+[
+{
+pk: 1,
+model: "users.user",
+fields: {
+username: "asker",
+password: "",
+last_login: "2013-12-08T10:57:55.593Z",
+email: "john@qq.com"
+}
+},
+
+{
+pk: 2,
+model: "users.user",
+fields: {
+username: "replyer_1",
+password: "",
+last_login: "2013-12-08T10:57:55.673Z",
+email: "doe@qq.com"
+}
+}
+,
+{
+pk: 3,
+model: "users.user",
+fields: {
+username: "voter_1",
+password: "",
+last_login: "2013-12-08T10:57:55.593Z",
+email: "john@qq.com"
+}
+},
+
+]

@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <script src="{{ STATIC_URL }}js/jquery-1.10.2.min.js"></script>
+        <script src="{{ STATIC_URL }}js/angular.js"></script>
+        <script src="{{ STATIC_URL }}js/ui-bootstrap-custom-0.7.0.js"></script>
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css">
+
+        <title>{% block title %}{% endblock title %}</title>
+
+    </head>
+    <body>
+        <div class='head'>
+            <div class="navbar">
+                <ul>
+                    <li><a href='{% url 'index' %}'>首页</a></li>
+                    <li><a  href="javascript:void(0)" class='askquestion'>ask</a></li>
+                {% if  user.is_authenticated %}
+                <li><a {% if is_me %}class='is-my-space'{% endif %} href='{% url 'users-user' user.id %}'>{{ user.username }}</a></li>
+                    <li><a href='{% url 'users-logout' %}'>退出 </a></li>
+                {% else %}
+                    <li><a href='{% url 'users-login' %}'>登录 </a></li>
+                    <li><a href='{% url 'users-signup' %}'>注册</a></li>
+                {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <div class='container'>
+            <div class='content'>
+        {% block content %}
+
+        {% endblock %}
+            </div>
+        </div>
+    </body>
+
+</html>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+
+$('.askquestion').click(function() {
+    $.ajax({
+	type : "get",
+	url : '/question/new/',
+	dataType : "html",
+	success: function(data) {
+	    //alert( $(data).find('#test').html() ); // returns null
+            $(".container").html($(data).html());
+        },
+	error : function() {
+	    alert("Sorry, The requested property could not be found.");
+	}
+    });
+
+});
+});
+</script>

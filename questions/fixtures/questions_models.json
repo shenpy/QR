@@ -1,0 +1,23 @@
+[
+{
+pk: 1,
+model: "questions.question",
+fields: {
+asker: 49,
+create_date: "2013-12-08T18:57:55.678",
+description: "i don't know how to...",
+title: "how to"
+}
+},
+
+{
+pk: 1,
+model: "questions.answer",
+fields: {
+text: "well, i know",
+score: 0,
+question: 9,
+replyer: 50
+}
+} 
+]
