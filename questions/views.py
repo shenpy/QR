@@ -61,7 +61,8 @@ class NewQuestionAjaxView:
 
     def do_GET(self):
         if self.request.user.is_authenticated():
-            form=QuestionForm()
+            form = QuestionForm()
+            form.label_suffix=''
             context = RequestContext(self.request, {'form': form})
             template  = loader.get_template('questions/ajax_new_question_form.html')
             return HttpResponse(template.render(context))

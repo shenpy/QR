@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import auth
 from django.http import response, HttpResponse, HttpResponseRedirect
