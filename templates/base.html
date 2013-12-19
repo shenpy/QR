@@ -206,6 +206,7 @@ $('.askquestion').click(function() {
 	success: function(data) {
 	    //alert( $(data).find('#test').html() ); // returns null
 			modal.open({content: data});
+			$('#id_title').focus();
         },
 	error : function() {
 	    alert("Sorry, The requested property could not be found.");
