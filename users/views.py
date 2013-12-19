@@ -26,7 +26,6 @@ class UserView:
             'username': user.username
 
         })
-        print request
         return HttpResponse(template.render(context))
 
 
