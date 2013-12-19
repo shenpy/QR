@@ -2,6 +2,7 @@
 from functools import wraps
 
 from django.core import serializers
+from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 
@@ -48,8 +49,8 @@ class NewQuestionAjaxView:
         #wrap.__name__ = function.__name__
         return wrap
 
-    @require_AJAX
     def __call__(self, request):
+        self.request=request
         try:
             callback = getattr(self, "do_%s" % request.method)
         except AttributeError:
@@ -57,7 +58,6 @@ class NewQuestionAjaxView:
                                                 if m.startswith("do_")]
             return HttpResponseNotAllowed(allowed_methods)
         return callback()
-
 
     def do_GET(self):
         if self.request.user.is_authenticated():
@@ -69,16 +69,12 @@ class NewQuestionAjaxView:
         else:
             return HttpResponseRedirect('/')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def do_POST(self):
+        form = QuestionForm(self.request.POST)
+        if form.is_valid():
+            print form
+            question = Question(title=form.cleaned_data['title'],
+                                description=form.cleaned_data['description'],
+                                asker = self.request.user)
+            question.save()
+            return HttpResponseRedirect(reverse('questions-question_detail', args=(question.id,)))
