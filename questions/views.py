@@ -72,9 +72,9 @@ class NewQuestionAjaxView:
     def do_POST(self):
         form = QuestionForm(self.request.POST)
         if form.is_valid():
-            print form
             question = Question(title=form.cleaned_data['title'],
                                 description=form.cleaned_data['description'],
                                 asker = self.request.user)
             question.save()
             return HttpResponseRedirect(reverse('questions-question_detail', args=(question.id,)))
+        return HttpResponseRedirect('/')
