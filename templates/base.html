@@ -36,6 +36,7 @@
 
 </html>
 <style>
+
 	#mask {
 		position:fixed;
 		top:0;
@@ -48,10 +49,18 @@
 	}
 
 	#modal {
+		padding: 0;
 		overflow: hidden;
 		background: white;
-		box-shadow: 0px 0px 40px 1px yellow;
+		box-shadow: 0px 0px 6px 1px #ECFECF;
 		position:absolute;
+	}
+	#modal .question-input {
+		width: 300px;
+	}
+	#modal textarea {
+		border-color: gray;
+		margin: 0;
 	}
 
 	#modal-content {
@@ -60,11 +69,15 @@
 	}
 
 	#close {
-		position:absolute;
+		color: gray;
+		cursor: default;
+		position: absolute;
+		top: 2px;
 		right: 30px;
-		width:24px;
-		height:27px;
-		display:block;
+		display: block;
+	}
+	#close:hover {
+		background: ECF1EF;
 	}
 </style>
 <script>
