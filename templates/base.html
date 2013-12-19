@@ -49,6 +49,8 @@
     }
 
     #modal {
+        height: 440px;
+        width: 350px;
         padding: 0;
         overflow: hidden;
         background: white;
@@ -142,10 +144,8 @@ var modal = (function(){
     // Center the modal in the viewport
     method.center = function () {
         var top, left;
-
         top = Math.max($(window).height() - $modal.outerHeight(), 0) / 2;
         left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2;
-
         $modal.css({
             top:top + $(window).scrollTop(),
             left:left + $(window).scrollLeft()
@@ -162,16 +162,15 @@ var modal = (function(){
         });
 
         method.center();
-        $(window).bind('resize.modal', method.center);
-        $modal.show();
+        $(window).bind('resize', method.center);
+        $modal.fadeIn();
         $overlay.show();
     };
 
     // Close the modal
     method.close = function () {
-        $modal.hide();
+        $modal.fadeOut(500, $content.empty);
         $overlay.hide();
-        $content.empty();
         $(window).unbind('resize.modal');
     };
 
@@ -190,6 +189,10 @@ var modal = (function(){
         $('.dismiss').click(function(e){
             e.preventDefault();
             method.close();
+        });
+        $('#modal-head-title').click(function(e){
+            e.preventDefault();
+        $('#id_title').val($(window).height());
         });
     });
 
