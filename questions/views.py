@@ -50,6 +50,8 @@ class NewQuestionAjaxView:
         return wrap
 
     def __call__(self, request):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
         self.request=request
         try:
             callback = getattr(self, "do_%s" % request.method)
@@ -60,14 +62,11 @@ class NewQuestionAjaxView:
         return callback()
 
     def do_GET(self):
-        if self.request.user.is_authenticated():
-            form = QuestionForm()
-            form.label_suffix=''
-            context = RequestContext(self.request, {'form': form})
-            template  = loader.get_template('questions/ajax_new_question_form.html')
-            return HttpResponse(template.render(context))
-        else:
-            return HttpResponseRedirect('/')
+        form = QuestionForm()
+        form.label_suffix=''
+        context = RequestContext(self.request, {'form': form})
+        template  = loader.get_template('questions/ajax_new_question_form.html')
+        return HttpResponse(template.render(context))
 
     def do_POST(self):
         form = QuestionForm(self.request.POST)
