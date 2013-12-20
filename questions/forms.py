@@ -10,14 +10,15 @@ class QuestionForm(ModelForm):
     #title = forms.CharField(max_length=255,
      #                       label=mark_safe('Title<br/>'))
     title = forms.CharField(max_length=255,
-							label='',
-							widget=forms.TextInput(attrs={'placeholder': 'title',
-														  'class': 'question-input'})
+        label='',
+        widget=forms.TextInput(attrs={'placeholder': 'title',
+                                      'class': 'question-input'})
     )
-    description = forms.CharField(label='',
-								  widget=forms.Textarea(attrs={'placeholder': 'description',
-															   'class': 'question-input'}),
-	)
+    description = forms.CharField(
+         label='',
+         widget=forms.Textarea(attrs={'placeholder': 'description',
+                                        'class': 'question-input'}),
+    )
 
     class Meta:
         model = Question
