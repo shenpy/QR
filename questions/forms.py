@@ -26,4 +26,9 @@ class QuestionForm(ModelForm):
 
 
 class AnswerForm(forms.Form):
-    text = forms.Textarea()
+    text = forms.CharField(
+         label='',
+         widget=forms.Textarea(attrs={'placeholder': 'your answer',
+                                      'rows': 3,
+                                      'class': 'question-input'}),
+    )
