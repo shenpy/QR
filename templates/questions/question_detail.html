@@ -25,7 +25,15 @@
         <p>目前没有人回答这个问题</P>
     {% endif %}
 
-<div>
+</div>
+
+<div id='new-answer'>
+        <form action="{% url 'questions-new_answer' question.id%}" method="post">{%csrf_token %}
+            {{ answerform.text }}
+            <input  class="answer-submit" type="submit" value="submit">
+        </form>
+</div>
+
 <style>
     #question-detail {
         width: 450px;
@@ -50,6 +58,42 @@
         margin-right: auto;
         width: 450px;
         border: solid 1px white;
+    }
+    #new-answer {
+        width: 450px;
+        margin: 20px 0 0 0;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #new-answer .question-input {
+        resize: none;
+        width: 450px;
+        padding: 10px;
+        font-size:1.3em;
+        font-family:"Ubuntu Light","Ubuntu","Ubuntu Mono","Segoe Print","Segoe UI";
+        color:#ccc;
+        border:solid 1px gray;
+        margin-bottom: 10px;
+        -moz-box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
+        //-webkit-box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+        box-shadow: inner 0 0 4px rgba(0, 0, 0, 0.2);
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px
+    }
+    #new-answer .answer-submit {
+        padding: 5px;
+        font-size:1.3em;
+        font-family:"Ubuntu Light","Ubuntu","Ubuntu Mono","Segoe Print","Segoe UI";
+        color:#ccc;
+        border:solid 1px gray;
+        margin-bottom: 10px;
+        -moz-box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
+        //-webkit-box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+        box-shadow: inner 0 0 4px rgba(0, 0, 0, 0.2);
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px
     }
 
 
