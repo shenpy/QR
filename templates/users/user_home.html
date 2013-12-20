@@ -6,29 +6,31 @@
 
 {% block content %}
         <div class='content'>
-		<div class='asked-questions'>
-		{% if questions %}
-			<h2>以下是你提出的问题</h2>
-			<ul>
-			{% for question in questions %}
-            <li><a href="{% url 'questions-question_detail' question.pk %}">{{ question.title }}</a>
-                <a class='datetime'>{{ question.create_date|date:"Y-m-d g:i:s" }}</a>
+        <div class='asked-questions'>
+        {% if questions %}
+            <h2>以下是你提出的问题</h2>
+            <ul>
+            {% for question in questions %}
+            <li><a class='question-title-short' href="{% url 'questions-question_detail' question.id %}">{{ question.title }}</a>
+                <a class='question-datetime'>{{question.create_date|date:"Y/m/d g:i"}}</a>
             </li>
-			{% endfor %}
-			</ul>
-		{% else %}
-			<p>you don't asked any questions yet!</p>
-		{% endif %}
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>you don't asked any questions yet!</p>
+        {% endif %}
         </div>
         </div>
 <style type="text/css">
     .asked-questions {
         box-shadow: 0px 0px 40px 1px white;
-        width: 600px;
+        width: 680px;
+        padding: 20px;
         top: 50px;
         margin: 0 auto;
         position: relative;
         padding: 20px;
+        overflow: hidden;
     }
     .datetime {
         color: gray;

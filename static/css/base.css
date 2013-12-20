@@ -82,3 +82,17 @@
     .is-my-space {
         color: 00b2bf !important;
     }
+   .question-title-short {
+        float: left;
+        width: 470px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .question-datetime {
+        float: right;
+        width: 160px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }

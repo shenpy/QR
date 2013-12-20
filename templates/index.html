@@ -11,8 +11,8 @@
         <h2>人们最近遇到的一些问题</h2>
         <ul>
         {% for question in questions %}
-            <li><a href="{% url 'questions-question_detail' question.id %}">{{ question.title }}</a>
-                <a class='datetime'>{{question.create_date|date:"Y-m-d g:i"}}</a>
+            <li><a class='question-title-short' href="{% url 'questions-question_detail' question.id %}">{{ question.title }}</a>
+                <a class='question-datetime'>{{question.create_date|date:"Y/m/d g:i"}}</a>
             </li>
         {% endfor %}
         </ul>
@@ -38,7 +38,7 @@
 <style type="text/css">
 
     .questions-list {
-		padding: 20px;
+        padding: 20px;
         box-shadow: 0px 0px 40px 1px white;
         position: relative;
         top: 50px;
