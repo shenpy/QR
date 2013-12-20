@@ -19,18 +19,7 @@ from django.template import RequestContext, loader, Context
 User = get_user_model()
 
 
-class QuestionDetail:
-
-    def __call__(self, request, id):
-        question = get_object_or_404(Question, id=id)
-        #json = serializers.serialize("json", [question])
-        #return HttpResponse(json, mimetype="application/json")
-        context = RequestContext(request, {'question': question})
-        template  = loader.get_template('questions/question_detail.html')
-        return HttpResponse(template.render(context))
-
-
-class NewQuestionAjaxView:
+class MyBaseView:
 
     def require_AJAX(function):
         """Return a bad request instance if the view is not using AJAX
@@ -47,7 +36,6 @@ class NewQuestionAjaxView:
                 return HttpResponseNotAllowed('AJAX')
             self.request=request
             return function(self, request)
-
         #wrap.__doc__ = function.__doc__
         #wrap.__name__ = function.__name__
         return wrap
@@ -63,6 +51,20 @@ class NewQuestionAjaxView:
                                                 if m.startswith("do_")]
             return HttpResponseNotAllowed(allowed_methods)
         return callback()
+
+
+class QuestionDetail:
+
+    def __call__(self, request, id):
+        question = get_object_or_404(Question, id=id)
+        #json = serializers.serialize("json", [question])
+        #return HttpResponse(json, mimetype="application/json")
+        context = RequestContext(request, {'question': question})
+        template  = loader.get_template('questions/question_detail.html')
+        return HttpResponse(template.render(context))
+
+
+class NewQuestionAjaxView(MyBaseView):
 
     def do_GET(self):
         form = QuestionForm()
@@ -80,3 +82,5 @@ class NewQuestionAjaxView:
             question.save()
             return HttpResponseRedirect(reverse('questions-question_detail', args=(question.id,)))
         return HttpResponseRedirect('/')
+
+
