@@ -23,8 +23,12 @@ class QuestionDetail:
 
     def __call__(self, request, id):
         question = get_object_or_404(Question, id=id)
-        json = serializers.serialize("json", [question])
-        return HttpResponse(json, mimetype="application/json")
+        #json = serializers.serialize("json", [question])
+        #return HttpResponse(json, mimetype="application/json")
+        context = RequestContext(request, {'question': question})
+        template  = loader.get_template('questions/question_detail.html')
+        return HttpResponse(template.render(context))
+
 
 class NewQuestionAjaxView:
 
@@ -42,7 +46,6 @@ class NewQuestionAjaxView:
             if not all(permission):
                 return HttpResponseNotAllowed('AJAX')
             self.request=request
-            print request
             return function(self, request)
 
         #wrap.__doc__ = function.__doc__

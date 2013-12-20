@@ -1,10 +1,59 @@
-﻿<!DOCTYPE html>
-<html>
+﻿{% extends "base.html" %}
+
+{% block title %}
+    {{question.title}}
+{% endblock %}
+
+{% block content %}
+<div id='question-detail'>
+    <div id='question-title'>
+        <p> {{question.title}} ?</p>
+    </div>
+    <div id='question-description'>
+        <p> {{question.description}}</p>
+    </div>
+</div>
+
+<div id='answer-list'>
+    {% if question.answers.all %}
+        {% for answer in question.answer.all %}
+            <div class='answer-detail'>
+                <p>{{ answer.text }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>目前没有人回答这个问题</P>
+    {% endif %}
+
+<div>
+<style>
+    #question-detail {
+        width: 450px;
+        margin: 0 auto;
+        border: solid 1px white;
+        border-radius: 5px;
+    }
+    #question-title {
+        margin: 25px;
+        width: 400px;
+        border-radius: 5px;
+        border: solid 1px white;
+    }
+    #question-description {
+        width: 300px;
+        border: solid 1px white;
+        border-radius: 5px;
+    }
+    #answer-list {
+        margin: 20px 0 0 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: 450px;
+        border: solid 1px white;
+    }
 
 
-<body>
-<h1> {{a}}</h1>
+</style>
+{% endblock %}
 
-</body>
 
-</html>
