@@ -28,7 +28,7 @@
 </div>
 
 <div id='new-answer'>
-        <form action="{% url 'questions-new_answer' question.id%}" method="post">{%csrf_token %}
+        <form onsubmit='return false' id="new-answer-form"  method="post">{%csrf_token %}
             {{ answerform.text }}
             <input  class="answer-submit" type="submit" value="submit">
         </form>
@@ -98,6 +98,23 @@
 
 
 </style>
+<script>
+    $(document).ready(function(){
+        $('.answer-submit').click(function(e) {
+            $.ajax({
+                type: "POST",
+                dataType: "html",
+                url: "{% url 'questions-new_answer' question.id %}",
+                data: $("#new-answer-form").serialize(),
+                success: function(data){
+                alert(data);},
+                error: function(data){
+                alert(data+'ds');
+                }
+            });
+            });
+           });
+           </script>
 {% endblock %}
 
 
