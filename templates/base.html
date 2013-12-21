@@ -58,6 +58,7 @@
         position:absolute;
     }
     #modal .question-input {
+        resize: none;
         width: 310px;
         border:0;
         padding:10px;
@@ -144,7 +145,7 @@ var modal = (function(){
     // Center the modal in the viewport
     method.center = function () {
         var top, left;
-        top = Math.max($(window).height() - $modal.outerHeight(), 0) / 2;
+        top = Math.max(Math.max($(window).height(),$(document).height(),document.documentElement.clientHeight) - $modal.outerHeight(), 0) / 2;
         left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2;
         $modal.css({
             top:top + $(window).scrollTop(),
@@ -190,10 +191,10 @@ var modal = (function(){
             e.preventDefault();
             method.close();
         });
-        $('#modal-head-title').click(function(e){
-            e.preventDefault();
-        $('#id_title').val($(window).height());
-        });
+        //$('#modal-head-title').click(function(e){
+        //    e.preventDefault();
+        //    $('#id_title').val($(document).height());
+        //});
     });
 
     return method;
