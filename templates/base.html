@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <script src="{{ STATIC_URL }}js/jquery-1.10.2.min.js"></script>
@@ -47,7 +48,11 @@
         opacity:0.5;
         filter:alpha(opacity=50);
     }
-
+    #modal form {
+        overflow: hidden;
+        width: 310px;
+        padding: 1px;
+    }
     #modal {
         height: 440px;
         width: 350px;
@@ -59,7 +64,7 @@
     }
     #modal .question-input {
         resize: none;
-        width: 310px;
+        width: 288px;
         border:0;
         padding:10px;
         font-size:1.3em;
