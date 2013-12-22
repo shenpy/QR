@@ -16,7 +16,7 @@
 
 <div id='answer-list'>
     {% if question.answers.all %}
-        {% for answer in question.answer.all %}
+        {% for answer in question.answers.all %}
             <div class='answer-detail'>
                 <p>{{ answer.text }}</p>
             </div>
@@ -28,14 +28,17 @@
     {% endif %}
 
 </div>
-
 <div id='new-answer'>
+    {% if user.is_authenticated %}
         <form onsubmit='return false' id="new-answer-form"  method="post">{%csrf_token %}
             {{ answerform.text }}
+            <a id="error-prompt"></a>
             <input  class="answer-submit" type="submit" value="submit">
         </form>
+    {% else %}
+        <p>请登录后回复</p>
+    {% endif %}
 </div>
-
 <style>
     #question-detail {
         width: 450px;
@@ -59,7 +62,6 @@
         margin-left: auto;
         margin-right: auto;
         width: 450px;
-        border: solid 1px white;
     }
     #new-answer {
         width: 472px;
@@ -102,6 +104,14 @@
         -moz-border-radius: 3px;
         border-radius: 3px
     }
+    .answer-detail {
+        margin: 0 0 20px 0;
+        width: 450px;
+        border: 1px solid white;
+    }
+    #error-prompt {
+        color: red;
+    }
 
 
 </style>
@@ -114,9 +124,14 @@
                 url: "{% url 'questions-new_answer' question.id %}",
                 data: $("#new-answer-form").serialize(),
                 success: function(data){
-                alert(data);},
-                error: function(data){
-                alert(data+'ds');
+                    $("#error-prompt").html("");
+                    var answer = $.parseJSON(data)[0];
+                    $("div.answer-detail:last").clone().insertAfter("div.answer-detail:last").html("<p>"+answer.fields.text+"</p>");
+                    $("#id_text").val("");
+                },
+                error: function(xhr){
+                    var error= $.parseJSON(xhr.responseText);
+                    $("#error-prompt").html(error.text);
                 }
             });
             });
