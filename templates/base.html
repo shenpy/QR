@@ -60,7 +60,7 @@
         overflow: hidden;
         background: white;
         box-shadow: 0px 0px 6px 1px #ECFECF;
-        position:absolute;
+        position: absolute;
     }
     #modal .question-input {
         resize: none;
@@ -150,11 +150,11 @@ var modal = (function(){
     // Center the modal in the viewport
     method.center = function () {
         var top, left;
-        top = Math.max(Math.max($(window).height(),$(document).height(),document.documentElement.clientHeight) - $modal.outerHeight(), 0) / 2;
-        left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2;
+        top = document.documentElement.clientHeight/2 -  $modal.height()/2;
+        left = Math.max($(window).width() - $modal.width(), 0) / 2;
         $modal.css({
-            top:top + $(window).scrollTop(),
-            left:left + $(window).scrollLeft()
+            "top": top ,
+            "left": left
         });
     };
 
@@ -162,10 +162,10 @@ var modal = (function(){
     method.open = function (settings) {
         $content.empty().append(settings.content);
 
-        $modal.css({
-            width: settings.width || 'auto',
-            height: settings.height || 'auto'
-        });
+      //  $modal.css({
+      //      width: settings.width || 'auto',
+      //      height: settings.height || 'auto'
+      //  });
 
         method.center();
         $(window).bind('resize', method.center);
