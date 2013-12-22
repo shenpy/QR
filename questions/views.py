@@ -5,6 +5,7 @@ from django.core import serializers
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
+from django.utils import simplejson
 
 from questions.models import *
 from questions.forms import QuestionForm, AnswerForm
@@ -99,5 +100,10 @@ class NewAnswerAjaxView(MyBaseView):
                 answer.save()
                 json = serializers.serialize("json", [answer])
                 return HttpResponse(json, mimetype="application/json")
+            else:
+                errors = answerform.errors
+                response =  HttpResponse(simplejson.dumps(errors))
+                response.status_code = 400
+                return response
         else:
             return HttpResponseForbidden()
