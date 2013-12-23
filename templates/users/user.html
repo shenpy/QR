@@ -12,7 +12,7 @@
 			<ul>
 			{% for question in questions %}
             <li><a href="{% url 'questions-question_detail' question.pk %}">{{ question.title }}</a>
-                <a class='datetime'>{{ question.create_date|date:"Y/m/d h:i" }}</a>
+                <a class='datetime'>{{ question.create_date|date:"Y/m/d H:i" }}</a>
             </li>
 			{% endfor %}
 			</ul>
