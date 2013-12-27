@@ -27,6 +27,7 @@ class User(AbstractBaseUser):
     username = models.CharField(max_length=40, unique=True,
                                         db_index=True)
     email = models.EmailField(max_length=254, unique=True)
+    following = models.ManyToManyField('self', symmetrical=False, related_name='followers', db_table='user_relationship')
 
 
     objects = MyUserManager()

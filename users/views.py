@@ -23,7 +23,7 @@ class UserView:
         template = loader.get_template("users/user.html")
         context = RequestContext(request, {
             'questions': questions,
-            'username': user.username
+            'other': user
 
         })
         return HttpResponse(template.render(context))
