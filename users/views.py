@@ -83,3 +83,25 @@ class SignupView(FormView):
         user = auth.authenticate(**form.cleaned_data)
         auth.login(self.request, user)
         return super(SignupView, self).form_valid(form)
+
+
+def follow(request, id):
+    user = request.user
+    if user.is_authenticated():
+        user.following.add(id)
+        user.save()
+        return HttpResponse()
+    else:
+        return HttpResponseRedirect(reverse_lazy('users-login'))
+
+
+def unfollow(request, id):
+    user = request.user
+    if user.is_authenticated():
+        user.following.remove(id)
+        user.save()
+        return HttpResponse()
+    else:
+        return HttpResponseRedirect(reverse_lazy('users-login'))
+
+
