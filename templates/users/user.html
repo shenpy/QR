@@ -22,18 +22,14 @@
     </div>
 
     <div class='users-list'>
-    {% if other.following.all %}
-        <h2>他的关注</h2>
-        <ul>
-        {% for user in other.following.all %}
-        <li><a href='{% url 'users-user' user.id %}'>{{ user.username }}</a></li>
-        {% endfor %}
-        </ul>
+    {% if user in other.followers.all %}
+        <a href='{% url 'users-unfollow' other.id %}' class='relationship unfollow'>取消关注</a>
+        <a href='{% url 'users-follow' other.id %}' class='relationship follow hidden'>关注</a>
     {% else %}
-        <p>no following yet!</p>
+        <a href='{% url 'users-follow' other.id %}' class='relationship follow'>关注</a>
+        <a href='{% url 'users-unfollow' other.id %}' class='relationship unfollow hidden'>取消关注</a>
     {% endif %}
     </div>
-
 
 <style type="text/css">
 
@@ -53,6 +49,41 @@
         width: 220px;
         float: right;
     }
+    .relationship {
+        padding: 5px;
+        background-color: #529ecc;
+        text-decoration: none;
+        color: white;
+    }
+    .hidden {
+        display: none;
+    }
 </style>
+
+<script>
+function change_relationship(href){
+    $.ajax({
+        type: "POST",
+            dataType: "html",
+            url: href,
+            success: function(data){
+                $(".relationship").each(function() {
+                    $(this).toggleClass('hidden');
+                });
+            },
+            error: function(xhr){
+                alert('error');
+            }
+    });
+}
+$(document).ready(function() {
+    $('.relationship').click(function(e){
+        e.preventDefault();
+        var href= $(this).attr('href');
+        change_relationship(href);
+    });
+});
+</script>
+
 {% endblock %}
 
