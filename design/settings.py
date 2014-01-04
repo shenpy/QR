@@ -181,3 +181,9 @@ LOGGING = {
         },
     }
 }
+
+if os.environ.get('DEVELOPMENT', False):
+    try:
+        from settings_io import *
+    except ImportError:
+        pass
