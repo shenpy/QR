@@ -12,7 +12,7 @@ from questions.forms import QuestionForm, AnswerForm
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, \
-                        HttpResponseNotAllowed
+                        HttpResponseNotAllowed, HttpResponseForbidden
 
 from django.template import RequestContext, loader, Context
 
@@ -60,7 +60,13 @@ class QuestionDetail:
         #json = serializers.serialize("json", [question])
         #return HttpResponse(json, mimetype="application/json")
         answerform = AnswerForm()
+        user = request.user
+        if user.is_authenticated():
+            answers = question.answers.select_related('voter').extra(select={'is_voted': 'id In (%s)' % user.voted.values('id').query})
+        else:
+            answers = question.answers.select_related('voter')
         context = RequestContext(request, {'question': question,
+                                           'answers': answers,
                                            'answerform': answerform})
         template  = loader.get_template('questions/question_detail.html')
         return HttpResponse(template.render(context))
@@ -107,3 +113,23 @@ class NewAnswerAjaxView(MyBaseView):
                 return response
         else:
             return HttpResponseForbidden()
+
+
+def vote(request, id):
+    user = request.user
+    if user.is_authenticated():
+        vote, created= Vote.objects.get_or_create(answer_id=id, voter=user)
+        vote.save()
+        return HttpResponse()
+    else:
+        return HttpResponseForbidden()
+
+
+def unvote(request, id):
+    user = request.user
+    if user.is_authenticated():
+        vote = get_object_or_404(Vote, answer_id=id, voter=user)
+        vote.delete()
+        return HttpResponse()
+    else:
+        return HttpResponseForbidden()

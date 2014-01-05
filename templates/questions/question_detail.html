@@ -6,6 +6,7 @@
 
 {% block content %}
 <div id='question-detail'>
+    <a id="asker-info"><a class='asker-name' href='{% url 'users-user' question.asker.id %}'>{{ question.asker.username }}</a><a class='ask-time'>{{ question.create_date }}</a></a>
     <div id='question-title'>
         <p> {{question.title}} ?</p>
     </div>
@@ -14,11 +15,24 @@
     </div>
 </div>
 
+<hr class="split" />
 <div id='answer-list'>
-    {% if question.answers.all %}
-        {% for answer in question.answers.all %}
+    {% if answers %}
+        {% for answer in answers %}
             <div class='answer-detail'>
                 <p>{{ answer.text }}</p>
+                <a class='reply-time'>{{ answer.create_date }}</a>
+                <a class='replyer-name' href='{% url 'users-user' answer.replyer.id %}'>{{ answer.replyer.username }}</a>
+            {% if user.is_authenticated %}
+                {% if answer.is_voted %}
+                <a class='answer-action unvote' href="{% url 'questions-answer_unvote' answer.id %}">取消赞同</a>
+                <a class='answer-action vote hidden' href="{% url 'questions-answer_vote' answer.id %}">赞同</a>
+                {% else %}
+                <a class='answer-action unvote hidden' href="{% url 'questions-answer_unvote' answer.id %}">取消赞同</a>
+                <a class='answer-action vote' href="{% url 'questions-answer_vote' answer.id %}">赞同</a>
+                {% endif %}
+            {% endif %}
+                <a>得分:{{ answer.score }}</a>
             </div>
         {% endfor %}
     {% else %}
@@ -40,26 +54,48 @@
     {% endif %}
 </div>
 <style>
+    #asker-info {
+        float: left;
+        padding-left: 20px;
+    }
+    .ask-time {
+        padding-left: 30px;
+        color: gray;
+    }
+    .split {
+        width: 472px;
+        margin: 10px auto 20px auto;
+    }
     #question-detail {
-        width: 450px;
-        margin: 20px auto 0 auto;
-        border: solid 1px white;
+        text-align: left;
+        font-weight: bold;
+        width: 472px;
+        padding-top: 20px;
+        margin: 0 auto;
     }
     #question-title {
-        margin: 25px;
+        font-size: 20px;
+        line-height: 20px;
+        text-align: left;
+        margin: 5px;
         width: 400px;
     }
     #question-description {
-        width: 300px;
+        font-size: 19px;
+        line-height: 19px;
+        margin: 0 5px 10px 5px;
+        width: 400px;
     }
     #answer-list {
         margin: 20px 0 0 0;
         margin-left: auto;
         margin-right: auto;
-        width: 450px;
+        width: 472px;
     }
     .answer-detail {
-        border: solid 1px white;
+        width: 472px;
+        border-bottom: solid 1px white;
+        padding-bottom: 6px;
     }
     #new-answer {
         width: 472px;
@@ -103,13 +139,29 @@
         border-radius: 3px
     }
     .answer-detail {
+        overflow: hidden;
         margin: 0 0 20px 0;
-        width: 450px;
+        width: 472px;
+    }
+    .answer-detail a{
+        width: 80px;
+        float: right;
+    }
+    .answer-detail p{
+        text-align: left;
+        padding: 0 5px 10px 5px;
+    }
+    .replyer-name {
+        color: gray;
+    }
+    .answer-detail .reply-time {
+        color: gray;
+        float: left;
+        width: 200px;
     }
     #error-prompt {
         color: red;
     }
-
 
 </style>
 <script>
