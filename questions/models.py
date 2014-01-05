@@ -31,10 +31,6 @@ class Answer(models.Model):
     def __unicode__(self):
         return u"%s" % self.text
 
-    def add_voter(self, voter):
-        vote, created = Vote.objects.get_or_create(answer=self, voter=voter)
-        vote.save()
-
 
 class Vote(models.Model):
     answer = models.ForeignKey(Answer)
