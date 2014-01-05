@@ -46,14 +46,12 @@ class Vote(models.Model):
 @receiver(post_save, sender=Vote)
 def on_create_vote(sender, instance, signal, created, **kwargs):
     if created:
-        print 'aa%r' % instance
         answer = instance.answer
         answer.score += 1
         answer.save()
 
 @receiver(post_delete, sender=Vote)
 def on_delete_vote(sender, instance, signal, **kwargs):
-    print 'dd%r' % instance
     answer = instance.answer
     answer.score -= 1
     answer.save()
