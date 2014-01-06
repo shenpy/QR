@@ -65,15 +65,18 @@ myapp.module({builder: function(myapp) {
     $(document).ready(function(){
         $('.askquestion').click(function(e) {
             e.preventDefault();
+            $(this).addClass('ajax-loading');
             $.ajax({
                 type : "get",
                 url : '/question/new/',
                 dataType : "html",
                 success: function(data) {
+                    $('.askquestion').removeClass('ajax-loading');
                     modal.open({content: data});
                     $('#id_title').focus();
                 },
                 error : function() {
+                    $('.askquestion').removeClass('ajax-loading');
                     alert("Sorry, try later!");
                 }
             });
