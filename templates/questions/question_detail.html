@@ -6,7 +6,7 @@
 
 {% block content %}
 <div id='question-detail'>
-    <a id="asker-info"><a class='asker-name' href='{% url 'users-user' question.asker.id %}'>{{ question.asker.username }}</a><a class='ask-time'>{{ question.create_date }}</a></a>
+    <a id="asker-info"><a class='asker-name' href='{% url 'users-user' question.asker.id %}'>{{ question.asker.username }}</a><a class='ask-time'>{{ question.create_date|date:'Y m d H:i' }}</a></a>
     <div id='question-title'>
         <p> {{question.title}} ?</p>
     </div>
@@ -21,7 +21,7 @@
         {% for answer in answers %}
             <div class='answer-detail'>
                 <p>{{ answer.text }}</p>
-                <a class='reply-time'>{{ answer.create_date }}</a>
+                <a class='reply-time'>{{ answer.create_date|date:'Y m d H:i' }}</a>
                 <a class='replyer-name' href='{% url 'users-user' answer.replyer.id %}'>{{ answer.replyer.username }}</a>
             {% if user.is_authenticated %}
                 {% if answer.is_voted %}
