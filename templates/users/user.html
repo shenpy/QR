@@ -55,6 +55,9 @@
     }
 </style>
 
+{% endblock %}
+
+{% block js-script %}
 <script>
 function change_relationship(href){
     $.ajax({
@@ -79,6 +82,4 @@ $(document).ready(function() {
     });
 });
 </script>
-
 {% endblock %}
-
