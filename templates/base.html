@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="{{ STATIC_URL }}js/jquery-1.10.2.min.js"></script>
-        <script src="{{ STATIC_URL }}js/angular.js"></script>
-        <script src="{{ STATIC_URL }}js/ui-bootstrap-custom-0.7.0.js"></script>
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css">
 
         <title>{% block title %}{% endblock title %}</title>
@@ -33,6 +30,11 @@
         {% endblock %}
             </div>
         </div>
+
+        <script src="{{ STATIC_URL }}js/jquery-1.10.2.min.js"></script>
+        <script src="{{ STATIC_URL }}js/angular.js"></script>
+        <script src="{{ STATIC_URL }}js/ui-bootstrap-custom-0.7.0.js"></script>
+
     </body>
 
 </html>
