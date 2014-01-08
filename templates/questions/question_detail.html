@@ -23,7 +23,6 @@
                 <p>{{ answer.text }}</p>
                 <a class='reply-time'>{{ answer.create_date|date:'Y m d H:i' }}</a>
                 <a class='replyer-name' href='{% url 'users-user' answer.replyer.id %}'>{{ answer.replyer.username }}</a>
-            {% if user.is_authenticated %}
                 {% if answer.is_voted %}
                 <a class='answer-action unvote' href="{% url 'questions-answer_unvote' answer.id %}">取消赞同</a>
                 <a class='answer-action vote hidden' href="{% url 'questions-answer_vote' answer.id %}">赞同</a>
@@ -31,27 +30,24 @@
                 <a class='answer-action unvote hidden' href="{% url 'questions-answer_unvote' answer.id %}">取消赞同</a>
                 <a class='answer-action vote' href="{% url 'questions-answer_vote' answer.id %}">赞同</a>
                 {% endif %}
-            {% endif %}
-                <a>得分:{{ answer.score }}</a>
+                <a>Vote {{ answer.score }}</a>
             </div>
+            <hr class="split" />
         {% endfor %}
     {% else %}
         <div class='answer-detail'>
             <p>目前没有人回答这个问题</P>
         </div>
+        <hr class="split" />
     {% endif %}
 
 </div>
 <div id='new-answer'>
-    {% if user.is_authenticated %}
         <form onsubmit='return false' id="new-answer-form"  method="post">{%csrf_token %}
             {{ answerform.text }}
             <a id="error-prompt"></a>
             <input  class="answer-submit" type="submit" value="submit">
         </form>
-    {% else %}
-        <p>请登录后回复</p>
-    {% endif %}
 </div>
 <style>
     #asker-info {
@@ -121,9 +117,13 @@
         padding: 5px;
         font-size:1.3em;
         color: white;
-        background-color: #168391;
+        background-color: #4abdcc;
         margin-bottom: 10px;
         border: none;
+        cursor: pointer;
+    }
+    #new-answer .answer-submit:hover {
+        background-color: #168391;
     }
     .answer-detail {
         overflow: hidden;
