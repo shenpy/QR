@@ -17,7 +17,7 @@
         {% endfor %}
         </ul>
     {% else %}
-        <p>there is no questions!</p>
+        <p>"{{ other.username }}" has no questions!</p>
     {% endif %}
     </div>
 
@@ -77,6 +77,7 @@ function change_relationship(href){
 $(document).ready(function() {
     $('.relationship').click(function(e){
         e.preventDefault();
+        if(!myapp.requireLogin()) return false;
         var href= $(this).attr('href');
         change_relationship(href);
     });

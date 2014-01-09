@@ -9,17 +9,15 @@
     <body>
         <div class='head'>
             <div class="navbar">
-                <ul>
-                    <li><a href='{% url 'index' %}'>首页</a></li>
-                    <li><a  href="question/new" class='askquestion'>提问 </a></li>
+                    <a href='{% url 'index' %}'>首页</a>
+                    <a  href="{% url 'questions-new_question_ajax' %}" class='askquestion'>提问 </a>
                 {% if  user.is_authenticated %}
-                <li><a {% if is_me %}class='is-my-space'{% endif %} href='{% url 'users-user' user.id %}'>{{ user.username }}</a></li>
-                    <li><a href='{% url 'users-logout' %}'>退出 </a></li>
+                <a {% if is_me %}class='is-my-space'{% endif %} href='{% url 'users-user' user.id %}'>{{ user.username }}</a>
+                    <a href='{% url 'users-logout' %}'>退出 </a>
                 {% else %}
-                    <li><a href='{% url 'users-login' %}'>登录 </a></li>
-                    <li><a href='{% url 'users-signup' %}'>注册</a></li>
+                    <a href='{% url 'users-login' %}'>登录 </a>
+                    <a href='{% url 'users-signup' %}'>注册</a>
                 {% endif %}
-                </ul>
             </div>
         </div>
 
@@ -30,8 +28,28 @@
         {% endblock %}
             </div>
         </div>
-    {% if not  user.is_authenticated %}
 
+    {% if not  user.is_authenticated %}
+        <div id='login-form' style="display: none">
+            <div id="modal-head">
+                <div id="modal-head-title">Login</div>
+                <div id="close" class="dismiss">close</div>
+            </div>
+            <div id="modal-content">
+                <form action="{% url 'users-login' %} " id='popup-login' method='post'>{% csrf_token %}
+                    <input class='popup-login-input' id='id_username' name='username' placeholder='username' type='text'>
+                    <input class='popup-login-input' id='id_password' name='password' placeholder='password' type='password'>
+                    <input type="submit" value="login">
+                </form>
+            </div >
+        </div>
+        <script>
+            var CURRENT_USER_ID = null;
+        </script>
+    {% else %}
+        <script>
+            var CURRENT_USER_ID = {{ user.id }};
+        </script>
     {% endif %}
 
         <script src="{{ STATIC_URL }}js/jquery-1.10.2.min.js"></script>

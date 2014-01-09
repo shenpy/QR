@@ -9,15 +9,17 @@ User = auth.get_user_model()
 
 class LoginForm(forms.Form):
     username = forms.CharField(
-        label=_("Username"),
+        error_messages={'required': 'please input your Username'},
+        label='',
+        widget=forms.TextInput(attrs={'placeholder': 'username'}),
         max_length=30,
         required=True,
-        widget=forms.TextInput()
     )
     password = forms.CharField(
-        label=_("Password"),
+        error_messages={'required': 'please input your Password'},
+        label='',
+        widget=forms.PasswordInput(attrs={'placeholder': 'password'}),
         required=True,
-        widget=forms.PasswordInput()
     )
 
     def clean(self):
@@ -28,7 +30,7 @@ class LoginForm(forms.Form):
         try:
             u = User.objects.get(username=username)
         except ObjectDoesNotExist:
-            raise forms.ValidationError("user '%s' not exist" % username)
+            raise forms.ValidationError('user "%s" not exist' % username)
         else:
             if u.check_password(password):
                 user = auth.authenticate(**self.cleaned_data)
@@ -43,25 +45,30 @@ class LoginForm(forms.Form):
 
 class SignupForm(forms.Form):
     username = forms.CharField(
-        label=_("Username"),
+        label='',
         max_length=30,
         required=True,
         error_messages={'required': 'Username is Required'},
-        widget=forms.TextInput(attrs={'autocomplete':'off'})
+        widget=forms.TextInput(attrs={'autocomplete':'off',
+                                      'placeholder': 'username'})
     )
     password = forms.CharField(
-        label=_("Password"),
+        label='',
         required=True,
         error_messages={'required': 'Password is Required'},
-        widget=forms.PasswordInput(attrs={'autocomplete':'off'})
+        widget=forms.PasswordInput(attrs={'autocomplete':'off',
+                                          'placeholder': 'password'})
     )
     password_confirm = forms.CharField(
-        label=_("Password(again)"),
+        label='',
         required=True,
         error_messages={'required': 'Confirm your password'},
-        widget=forms.PasswordInput(attrs={'autocomplete':'off'})
+        widget=forms.PasswordInput(attrs={'autocomplete':'off',
+                                          'placeholder': 'confirm password'})
     )
     email = forms.EmailField(
+        label='',
+        widget=forms.TextInput(attrs={'placeholder': 'email'}),
         error_messages={'required': 'Email is required',
                         'invalid': 'Email format invalid'}
     )

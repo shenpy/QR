@@ -1,8 +1,12 @@
-<div >
-    <form action="{% url 'questions-new_question_form' %}" method="post">{% csrf_token %}
-                {{form.as_p}}
-                <input type="submit" value="send">
-    </form>
+<div id="modal-head">
+    <div id="modal-head-title">ask question</div>
+    <div id="close" class="dismiss">close</div>
 </div>
-
-
+<div id="modal-content">
+    <div >
+        <form id="new-question-form" action="{% url 'questions-new_question_ajax' %}" method="post">{% csrf_token %}
+                    {{form.as_p}}
+                    <input type="submit" value="send">
+        </form>
+    </div>
+</div>

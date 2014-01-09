@@ -64,34 +64,24 @@
     }
     #question-detail {
         text-align: left;
-        font-weight: bold;
         width: 472px;
         padding-top: 20px;
         margin: 0 auto;
     }
     #question-title {
-        font-size: 20px;
-        line-height: 20px;
         text-align: left;
         margin: 5px;
-        width: 400px;
+        width: 472px;
     }
     #question-description {
-        font-size: 19px;
-        line-height: 19px;
         margin: 0 5px 10px 5px;
-        width: 400px;
+        width: 472px;
     }
     #answer-list {
         margin: 20px 0 0 0;
         margin-left: auto;
         margin-right: auto;
         width: 472px;
-    }
-    .answer-detail {
-        width: 472px;
-        border-bottom: solid 1px white;
-        padding-bottom: 6px;
     }
     #new-answer {
         width: 472px;
@@ -127,7 +117,6 @@
     }
     .answer-detail {
         overflow: hidden;
-        margin: 0 0 20px 0;
         width: 472px;
     }
     .answer-detail a{
@@ -136,7 +125,7 @@
     }
     .answer-detail p{
         text-align: left;
-        padding: 0 5px 10px 5px;
+        padding: 0 0 10px 0;
     }
     .replyer-name {
         color: gray;
@@ -174,11 +163,19 @@ function toggle_state(href){
 $(document).ready(function() {
     $('.answer-action').click(function(e){
         e.preventDefault();
+        if(!CURRENT_USER_ID){
+            myapp.modal.open({content: $('#login-form').html()});
+            return false;
+        }
         var href= $(this).attr('href');
         $(this).parent().addClass('active-vote');
         toggle_state(href);
     });
+    $('#new-answer-form').click(function(e) {
+        if(!myapp.requireLogin()) return false;
+    });
     $('.answer-submit').click(function(e) {
+        if(!myapp.requireLogin()) return false;
         $.ajax({
             type: "POST",
             dataType: "html",

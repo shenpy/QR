@@ -1,30 +1,31 @@
 myapp.module({builder: function(myapp) {
+    var requireLogin = function() {
+            if(!CURRENT_USER_ID){
+                modal.open({content: $('#login-form').html()});
+                return false;
+            }
+            return true;
+        };
     var modal = (function(){
         var
         method = {},
         $overlay,
         $modal,
-        $content,
-        $close;
-
+        $close,
+        $content;
         method.center = function () {
             var top, left;
             top = document.documentElement.clientHeight/2 -  $modal.height()/2;
             left = Math.max($(window).width() - $modal.width(), 0) / 2;
             $modal.css({
-                "top": top ,
+                "top": top + $(document).scrollTop() ,
                 "left": left
             });
         };
 
         method.open = function (settings) {
             $content.empty().append(settings.content);
-
-          //  $modal.css({
-          //      width: settings.width || 'auto',
-          //      height: settings.height || 'auto'
-          //  });
-
+            $('.dismiss').bind('click', method.close);
             method.center();
             $(window).bind('resize', method.center);
             $modal.fadeIn();
@@ -32,24 +33,23 @@ myapp.module({builder: function(myapp) {
         };
 
         method.close = function () {
-            $modal.fadeOut(500, $content.empty);
+            $modal.fadeOut();
             $overlay.hide();
-            $(window).unbind('resize.modal');
+            $(window).unbind('resize');
         };
 
         $overlay = $('<div class="dismiss" id="mask"></div>');
         $modal = $('<div id="modal"></div>');
-        $content = $('<div id="modal-content"></div>');
-        $head = $('<div id="modal-head"><div id="modal-head-title">ask question</div><div class="dismiss" id="close" href="#">close</div></div>');
+        $content = $('<div ></div>');
+
+        $modal.append($content);
 
         $modal.hide();
         $overlay.hide();
-        $modal.append($head, $content);
 
         $(document).ready(function(){
             $('body').append($overlay, $modal);
-            $('.dismiss').click(function(e){
-                e.preventDefault();
+            $('.dismiss').click(function(){
                 method.close();
             });
             //$('#modal-head-title').click(function(e){
@@ -65,6 +65,7 @@ myapp.module({builder: function(myapp) {
     $(document).ready(function(){
         $('.askquestion').click(function(e) {
             e.preventDefault();
+            if(!myapp.requireLogin())return false;
             $(this).addClass('ajax-loading');
             $.ajax({
                 type : "get",
@@ -83,6 +84,7 @@ myapp.module({builder: function(myapp) {
         });
     });
 
+    myapp.requireLogin = requireLogin;
     myapp.modal = modal;
     }
 });
