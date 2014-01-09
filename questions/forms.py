@@ -28,6 +28,7 @@ class QuestionForm(ModelForm):
 class AnswerForm(forms.Form):
     text = forms.CharField(
          label='',
+         error_messages={'required': 'please input your Comment'},
          widget=forms.Textarea(attrs={'placeholder': 'your answer',
                                       'rows': 3,
                                       'class': 'question-input'}),
