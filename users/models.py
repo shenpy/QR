@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
+import datetime
+
 from django.db import models
+from django.conf import settings
+from django.core.cache import cache
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
@@ -37,3 +40,19 @@ class User(AbstractBaseUser):
 
     def __unicode__(self):
         return unicode(self.username)
+
+    @property
+    def last_active(self):
+        return cache.get('active_%s' % self.username)
+
+    @property
+    def is_online(self):
+        if self.last_active:
+            now = datetime.datetime.now()
+            if now > self.last_active + datetime.timedelta(
+                        seconds=settings.USER_ONLINE_TIMEOUT):
+                return False
+            else:
+                return True
+        else:
+            return False
