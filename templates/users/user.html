@@ -22,7 +22,7 @@
     </div>
 
     <div class='users-list'>
-    {% if user in other.followers.all %}
+    {% if user in other.followers %}
         <a href='{% url 'users-unfollow' other.id %}' class='relationship unfollow'>取消关注</a>
         <a href='{% url 'users-follow' other.id %}' class='relationship follow hidden'>关注</a>
     {% else %}

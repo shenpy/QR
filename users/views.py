@@ -87,9 +87,9 @@ class SignupView(FormView):
 
 def follow(request, id):
     user = request.user
+    other = get_object_or_404(User, id=id)
     if user.is_authenticated():
-        user.following.add(id)
-        user.save()
+        user.add_following(other)
         return HttpResponse()
     else:
         return HttpResponseRedirect(reverse_lazy('users-login'))
@@ -97,11 +97,9 @@ def follow(request, id):
 
 def unfollow(request, id):
     user = request.user
+    other = get_object_or_404(User, id=id)
     if user.is_authenticated():
-        user.following.remove(id)
-        user.save()
+        user.remove_following(other)
         return HttpResponse()
     else:
         return HttpResponseRedirect(reverse_lazy('users-login'))
-
-

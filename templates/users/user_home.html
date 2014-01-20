@@ -23,9 +23,9 @@
 
     <div class='users-list'>
         <h2>我的关注</h2>
-    {% if user.following.all %}
+    {% if user.followings %}
         <ul>
-        {% for user in user.following.all %}
+        {% for user in user.followings %}
         <li><a href='{% url 'users-user' user.id %}'>{{ user.username }}</a></li>
         {% endfor %}
         </ul>
