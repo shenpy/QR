@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
@@ -14,7 +14,7 @@ class Migration(SchemaMigration):
             ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('description', self.gf('django.db.models.fields.TextField')()),
             ('asker', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['users.User'])),
-            ('create_date', self.gf('django.db.models.fields.DateField')(default=datetime.datetime.now)),
+            ('create_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
         ))
         db.send_create_signal(u'questions', ['Question'])
 
@@ -25,6 +25,7 @@ class Migration(SchemaMigration):
             ('text', self.gf('django.db.models.fields.TextField')()),
             ('question', self.gf('django.db.models.fields.related.ForeignKey')(related_name='answers', to=orm['questions.Question'])),
             ('score', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('create_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
         ))
         db.send_create_signal(u'questions', ['Answer'])
 
@@ -57,6 +58,7 @@ class Migration(SchemaMigration):
     models = {
         u'questions.answer': {
             'Meta': {'object_name': 'Answer'},
+            'create_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'question': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'answers'", 'to': u"orm['questions.Question']"}),
             'replyer': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['users.User']"}),
@@ -67,7 +69,7 @@ class Migration(SchemaMigration):
         u'questions.question': {
             'Meta': {'object_name': 'Question'},
             'asker': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['users.User']"}),
-            'create_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime.now'}),
+            'create_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'description': ('django.db.models.fields.TextField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
@@ -80,8 +82,8 @@ class Migration(SchemaMigration):
         },
         u'users.user': {
             'Meta': {'object_name': 'User'},
-            'create_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '254'}),
+            'following': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'followers'", 'symmetrical': 'False', 'db_table': "'user_relationship'", 'to': u"orm['users.User']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),

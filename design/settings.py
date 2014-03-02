@@ -31,7 +31,7 @@ DATABASES = {
 
 	'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': r'design',                      # Or path to database file if using sqlite3.
+        'NAME': r'final_design',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': 'design',
         'PASSWORD': 'design',
@@ -181,9 +181,3 @@ LOGGING = {
         },
     }
 }
-
-if os.environ.get('DEVELOPMENT', False):
-    try:
-        from settings_io import *
-    except ImportError:
-        pass
