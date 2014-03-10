@@ -30,15 +30,15 @@
                 <a class='answer-action unvote hidden' href="{% url 'questions-answer_unvote' answer.id %}">取消赞同</a>
                 <a class='answer-action vote' href="{% url 'questions-answer_vote' answer.id %}">赞同</a>
                 {% endif %}
-                <a>Vote {{ answer.score }}</a>
+                <a class="answer-{{ answer.id }}-score">Vote {{ answer.score }}</a>
+                <hr class="split" />
             </div>
-            <hr class="split" />
         {% endfor %}
     {% else %}
         <div class='answer-detail'>
             <p>目前没有人回答这个问题</P>
+            <hr class="split" />
         </div>
-        <hr class="split" />
     {% endif %}
 
 </div>
@@ -150,18 +150,41 @@ function toggle_state(href){
             dataType: "html",
             url: href,
             success: function(data){
+                var answer = $.parseJSON(data)[0];
                 $(".active-vote .answer-action").each(function() {
                     $(this).toggleClass('hidden');
+                    $('.answer-'+answer.id+'-score').html('Vote '+answer.score);
                 });
                 $(".active-vote").removeClass('active-vote');
             },
             error: function(xhr){
-                alert('error');
+                alert('server error');
             }
     });
 }
-$(document).ready(function() {
-    $('.answer-action').click(function(e){
+
+function render_vote_response(response){
+    var answer = $.parseJSON(response)[0];
+    answer_html =
+        '<div class="answer-detail">'
+           + '<p>' + answer.text + '</p>'
+           + '<a class ="reply-time" href="">' + answer.create_date + '</a>'
+           + '<a class ="reply-name" href="' + '/user/1"' +'>' + answer.replyer__username + '</a>'
+           + '<a class="answer-action unvote hidden" href="/question/answer/' + answer.id + '/unvote/">取消赞同</a>'
+           + '<a class="answer-action vote" href="/question/answer/'+ answer.id + '/vote/">赞同</a>'
+           + '<a class="answer-' + answer.id + '-score"'+ '>Vote ' + answer.score + '</a>'
+           + '<hr class="split">'
+         +'</div>';
+
+
+    var $answerdetail = $(answer_html);
+    $("#answer-list").append($answerdetail);
+    bind_vote_click();
+}
+
+function bind_vote_click(){
+    //get newly create element working
+    $('.answer-action').bind('click', function(e){
         e.preventDefault();
         if(!CURRENT_USER_ID){
             myapp.modal.open({content: $('#login-form').html()});
@@ -171,6 +194,10 @@ $(document).ready(function() {
         $(this).parent().addClass('active-vote');
         toggle_state(href);
     });
+}
+
+$(document).ready(function() {
+    bind_vote_click();
     $('#new-answer-form').click(function(e) {
         if(!myapp.requireLogin()) return false;
     });
@@ -183,9 +210,7 @@ $(document).ready(function() {
             data: $("#new-answer-form").serialize(),
             success: function(data){
                 $("#error-prompt").html("");
-                var answer = $.parseJSON(data)[0];
-                $("div.answer-detail:last").clone().insertAfter("div.answer-detail:last").html("<p>"+answer.fields.text+"</p>");
-                $("#id_text").val("");
+                render_vote_response(data);
             },
             error: function(xhr){
                 var error= $.parseJSON(xhr.responseText);
@@ -193,7 +218,6 @@ $(document).ready(function() {
             }
         });
     });
-
 });
 </script>
 {% endblock %}

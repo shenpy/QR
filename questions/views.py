@@ -16,6 +16,8 @@ from django.http import HttpResponse, HttpResponseRedirect, \
 
 from django.template import RequestContext, loader, Context
 
+from .util import answer_as_json
+
 User = get_user_model()
 
 
@@ -104,8 +106,8 @@ class NewAnswerAjaxView(MyBaseView):
                 answer.replyer = self.request.user
                 answer.question_id = kwargs['id']
                 answer.save()
-                json = serializers.serialize("json", [answer])
-                return HttpResponse(json, mimetype="application/json")
+                answer_json = answer_as_json(answer)
+                return HttpResponse(answer_json, mimetype="application/ddson")
             else:
                 errors = answerform.errors
                 response =  HttpResponse(simplejson.dumps(errors))
@@ -120,7 +122,9 @@ def vote(request, id):
     if user.is_authenticated():
         vote, created= Vote.objects.get_or_create(answer_id=id, voter=user)
         vote.save()
-        return HttpResponse()
+        answer = Answer.objects.get(id=id)
+        answer_json = answer_as_json(answer)
+        return HttpResponse(answer_json, mimetype="application/json")
     else:
         return HttpResponseForbidden()
 
@@ -130,6 +134,8 @@ def unvote(request, id):
     if user.is_authenticated():
         vote = get_object_or_404(Vote, answer_id=id, voter=user)
         vote.delete()
-        return HttpResponse()
+        answer = Answer.objects.get(id=id)
+        answer_json = answer_as_json(answer)
+        return HttpResponse(answer_json, mimetype="application/json")
     else:
         return HttpResponseForbidden()
