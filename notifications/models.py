@@ -13,8 +13,8 @@ class Activity(models.Model):
 
     def notify(self, receivers):
         for receiver in receivers:
-            Notification(text=self.text,
-                         receiver=receiver).save()
+            Notification.objects.get_or_create(text=self.text,
+                                               receiver=receiver)
 
 
 class Notification(models.Model):

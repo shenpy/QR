@@ -11,13 +11,15 @@ class QuestionForm(ModelForm):
      #                       label=mark_safe('Title<br/>'))
     title = forms.CharField(max_length=255,
         label='',
-        widget=forms.TextInput(attrs={'placeholder': 'title',
+        widget=forms.TextInput(attrs={'placeholder': '标题',
                                       'class': 'question-input'})
     )
     description = forms.CharField(
          label='',
-         widget=forms.Textarea(attrs={'placeholder': 'description',
-                                        'class': 'question-input'}),
+         widget=forms.Textarea(attrs={'placeholder': \
+                                u"""描述你遇到的问题
+                                    可以使用"@用户名"的方式寻求帮助""",
+                                    'class': 'question-input'}),
     )
 
     class Meta:

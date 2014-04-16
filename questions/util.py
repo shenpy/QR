@@ -1,3 +1,7 @@
+from django.core.urlresolvers import reverse
+import re
+
+from users.models import User
 import json
 from datetime import datetime
 
@@ -23,3 +27,25 @@ def _get_field_value(instance, attr):
         value = value.strftime('%Y %m %d %H:%M')
         print value
     return value
+
+def get_help(text):
+    #matches = re.finditer('\@(\S+)\s', text)
+    matches = re.finditer(ur'\@([\u4e00-\u9fa5_a-zA-Z0-9]+)[^\@]*', text)
+    existing_matches = {}
+    asked = []
+    for matched in matches:
+        username = matched.groups()[0]
+        try:
+            receiver = User.objects.get(username=username)
+        except:
+            pass
+        else:
+            asked.append(receiver)
+            orig = matched.group()
+            url = reverse('users-user', args=(receiver.id,))
+            username_with_link = \
+                '@<a href="{0}">{1}</a> '.format(url, receiver.username)
+            existing_matches[orig] = username_with_link
+    for orig, new in existing_matches.iteritems():
+        text = text.replace(orig, new)
+    return text, asked

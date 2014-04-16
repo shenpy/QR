@@ -11,7 +11,7 @@
         <p> {{question.title}} ?</p>
     </div>
     <div id='question-description'>
-        <p> {{question.description}}</p>
+        <p> {{question.description | safe}}</p>
     </div>
 </div>
 
@@ -20,7 +20,7 @@
     {% if answers %}
         {% for answer in answers %}
             <div class='answer-detail'>
-                <p>{{ answer.text }}</p>
+                <p>{{ answer.text | safe}}</p>
                 <a class='reply-time'>{{ answer.create_date|date:'Y m d H:i' }}</a>
                 <a class='replyer-name' href='{% url 'users-user' answer.replyer.id %}'>{{ answer.replyer.username }}</a>
                 {% if answer.is_voted %}

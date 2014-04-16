@@ -6,17 +6,15 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.utils import simplejson
-
-from questions.models import *
-from questions.forms import QuestionForm, AnswerForm
-
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, \
                         HttpResponseNotAllowed, HttpResponseForbidden
-
 from django.template import RequestContext, loader, Context
+from .util import answer_as_json, get_help
 
-from .util import answer_as_json
+from notifications.models import Activity, Notification
+from questions.models import *
+from questions.forms import QuestionForm, AnswerForm
 
 User = get_user_model()
 
@@ -86,10 +84,24 @@ class NewQuestionAjaxView(MyBaseView):
     def do_POST(self, *args, **kwargs):
         form = QuestionForm(self.request.POST)
         if form.is_valid():
-            question = Question(title=form.cleaned_data['title'],
-                                description=form.cleaned_data['description'],
+            title = form.cleaned_data['title']
+            description, asked = get_help(form.cleaned_data['description'])
+            question = Question(title=title,
+                                description=description,
                                 asker = self.request.user)
             question.save()
+            user = self.request.user
+            user_href = reverse('users-user', args=(user.id,))
+            question_href = reverse('questions-question_detail', args=(user.id,))
+            user_tag = \
+                       '<a href="{0}">{1}</a>'.format(user_href, user.username)
+            question_tag = \
+                       '<a href="{0}">{1}</a>'.format(question_href, question.title)
+            text = u'{0} asked a new question: {1}'.format(user_tag, question_tag)
+            activity = Activity(text=text, user=user)
+            activity.save()
+            receivers = set(user.followers.all()).union(asked)
+            activity.notify(receivers)
             return HttpResponseRedirect(reverse('questions-question_detail', args=(question.id,)))
         return HttpResponseRedirect('/')
 
