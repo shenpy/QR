@@ -26,7 +26,6 @@ def _get_field_value(instance, attr):
     value = getattr(instance, attr)
     if isinstance(value, datetime):
         value = value.strftime('%Y %m %d %H:%M')
-        print value
     return value
 
 def get_help(text):
@@ -46,6 +45,7 @@ def get_help(text):
             url = reverse('users-user', args=(receiver.id,))
             username_with_link = \
                 u'@<a href="{0}">{1}</a> '.format(url, receiver.username)
+            orig = u'@{0}'.format(username)
             existing_matches[orig] = username_with_link
     for orig, new in existing_matches.iteritems():
         text = text.replace(orig, new)
@@ -58,11 +58,9 @@ def create_tags(text):
     tags = []
     for matched in matches:
         tag_name = matched.groups()[0]
-        print tag_name, '----found tag'
         try:
             tag, created = Tag.objects.get_or_create(name=tag_name)
             tags.append(tag)
-            print tag
         finally:
             pass
     return tags

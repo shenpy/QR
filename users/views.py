@@ -8,12 +8,25 @@ from django.views.generic.edit import View, FormView
 
 from users.forms import LoginForm, SignupForm
 from users.models import User
-from notifications.models import Activity
+from notifications.models import Activity, Notification
 
 
-class UserView:
+class ExtraMixin:
+
+    def get_extra_context(self):
+        context = {}
+        user = self.request.user
+        if user.is_authenticated():
+            notifications_count = Notification.objects.filter(receiver=user, is_read=False).count()
+            context['notifications_count'] = notifications_count
+        return context
+
+
+
+class UserView(ExtraMixin):
 
     def __call__(self, request, **kwargs):
+        self.request = request
         if request.user.is_authenticated() and \
             request.user.id == int(kwargs['id']):
             return HttpResponseRedirect(reverse_lazy('users-user_home'))
@@ -25,6 +38,7 @@ class UserView:
             'other': user
 
         })
+        context.update(self.get_extra_context())
         return HttpResponse(template.render(context))
 
 

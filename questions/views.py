@@ -96,7 +96,7 @@ class NewQuestionAjaxView(MyBaseView):
                 question.tags.add(tag)
             user = self.request.user
             user_href = reverse('users-user', args=(user.id,))
-            question_href = reverse('questions-question_detail', args=(user.id,))
+            question_href = reverse('questions-question_detail', args=(question.id,))
             user_tag = \
                        '<a href="{0}">{1}</a>'.format(user_href, user.username)
             question_tag = \
