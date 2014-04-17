@@ -8,7 +8,7 @@
 
     <div class='questions-list'>
     {% if questions %}
-        <h2> 我遇到的一些问题</h2>
+        <h3> 我遇到的一些问题</h3>
         <ul>
         {% for question in questions %}
             <li><a class='question-title-short' href="{% url 'questions-question_detail' question.id %}">{{ question.title }}</a>
@@ -40,7 +40,7 @@
     .questions-list {
         padding: 20px;
         position: relative;
-        top: 50px;
+        top: 20px;
         width: 680px;
         float: left;
     }
