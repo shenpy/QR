@@ -16,11 +16,17 @@ class IndexView(View):
         if tag_name:
             tag = get_object_or_404(Tag, name=tag_name)
             questions = tag.questions.all()
+            users = set()
+            for question in questions:
+                users.add(question.asker)
+            related = User.objects.filter(answer__question__in=questions)
+            for user in related:
+                users.add(user)
         else:
             questions = Question.objects.all()[:10]
             tag = None
+            users = User.objects.all()[:10]
         tags = Tag.objects.all()[:36]
-        users = User.objects.all()[:10]
         return render(request, self.template_name,
                         {'questions': questions,
                          'tags': tags,

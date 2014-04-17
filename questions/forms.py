@@ -32,7 +32,7 @@ class AnswerForm(forms.Form):
     text = forms.CharField(
          label='',
          error_messages={'required': 'please input your Comment'},
-         widget=forms.Textarea(attrs={'placeholder': 'your answer',
+         widget=forms.Textarea(attrs={'placeholder': '请确保您的回复对他人有所帮助！',
                                       'rows': 3,
                                       'class': 'question-input'}),
     )

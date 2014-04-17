@@ -17,20 +17,20 @@
         {% endfor %}
         </ul>
     {% else %}
-        <p>there is no questions!</p>
+        <h3>你没有发布任何问题！</h3>
     {% endif %}
     </div>
 
     <div class='users-list'>
-        <h2>我的关注</h2>
     {% if user.following.all %}
+        <h2>我的关注</h2>
         <ul>
         {% for user in user.following.all %}
         <li><a href='{% url 'users-user' user.id %}'>{{ user.username }}</a></li>
         {% endfor %}
         </ul>
     {% else %}
-        <p>no following yet!</p>
+        <h3>您未关注任何人！</h3>
     {% endif %}
     </div>
 
