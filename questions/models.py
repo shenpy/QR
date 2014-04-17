@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save, post_delete, pre_delete
 from django.dispatch import receiver
@@ -9,11 +10,23 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=40)
+    count = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return u"%s" % self.name
+
+    def build_url(self):
+        return u"{0}?tag={1}".format(reverse('index'), self.name)
+
+
 class Question(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     asker = models.ForeignKey(User)
     create_date = models.DateTimeField(default=datetime.now)
+    tags = models.ManyToManyField(Tag, related_name='questions', blank=True)
 
     def __unicode__(self):
         return u"%s" % self.title

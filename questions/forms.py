@@ -17,14 +17,15 @@ class QuestionForm(ModelForm):
     description = forms.CharField(
          label='',
          widget=forms.Textarea(attrs={'placeholder': \
-                                u"""描述你遇到的问题
-                                    可以使用"@用户名"的方式寻求帮助""",
+                                u"""描述你遇到的问题:
+                                    >可以使用"#标记#"的方式对问题分类
+                                    >可以使用"@用户名"的方式寻求帮助""",
                                     'class': 'question-input'}),
     )
 
     class Meta:
         model = Question
-        exclude = ['create_date', 'asker']
+        exclude = ['create_date', 'asker', 'tags']
 
 
 class AnswerForm(forms.Form):

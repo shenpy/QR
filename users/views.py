@@ -93,9 +93,9 @@ def follow(request, id):
         user_href = reverse('users-user', args=(user.id,))
         following_href = reverse('users-user', args=(following.id,))
         user_tag = \
-                   '<a href="{0}">{1}</a>'.format(user_href, user.username)
+                   u'<a href="{0}">{1}</a>'.format(user_href, user.username)
         following_tag = \
-                   '<a href="{0}">{1}</a>'.format(following_href, following.username)
+                   u'<a href="{0}">{1}</a>'.format(following_href, following.username)
         text = u'{0}关注了{1}'.format(user_tag, following_tag)
         activity = Activity(text=text, user=user)
         activity.save()

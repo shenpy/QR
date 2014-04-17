@@ -1,10 +1,11 @@
-from django.core.urlresolvers import reverse
 import re
-
-from users.models import User
 import json
 from datetime import datetime
 
+from django.core.urlresolvers import reverse
+
+from users.models import User
+from questions.models import Tag
 
 def answer_as_json(answer):
     all_fields = [ field.name for field in answer._meta.fields ]
@@ -44,8 +45,24 @@ def get_help(text):
             orig = matched.group()
             url = reverse('users-user', args=(receiver.id,))
             username_with_link = \
-                '@<a href="{0}">{1}</a> '.format(url, receiver.username)
+                u'@<a href="{0}">{1}</a> '.format(url, receiver.username)
             existing_matches[orig] = username_with_link
     for orig, new in existing_matches.iteritems():
         text = text.replace(orig, new)
     return text, asked
+
+
+def create_tags(text):
+    """ create tag from new question description """
+    matches = re.finditer(ur'\#([\u4e00-\u9fa5_a-zA-Z0-9]+)\#', text)
+    tags = []
+    for matched in matches:
+        tag_name = matched.groups()[0]
+        print tag_name, '----found tag'
+        try:
+            tag, created = Tag.objects.get_or_create(name=tag_name)
+            tags.append(tag)
+            print tag
+        finally:
+            pass
+    return tags

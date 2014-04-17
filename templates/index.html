@@ -5,10 +5,23 @@
 {% endblock %}
 
 {% block content %}
-
+    {% if tags %}
+        <div class='question-tags' >
+        {%for tag in tags %}
+            <a href="{{ tag.build_url }}" class='question-tag'>{{tag.name}} </a>
+        {% endfor %}
+        </div>
+        <div class='all-tags' >
+            <a href="{% url 'index' %}">更多分类</a>
+        </div>
+    {% endif %}
     <div class='questions-list'>
     {% if questions %}
-        <h2>人们最近遇到的一些问题</h2>
+        {% if not tag %}
+            <h3>最近被提出的一些问题</h3>
+        {% else %}
+            <h3>与{{tag.name}}相关的问题</h3>
+        {% endif %}
         <ul>
         {% for question in questions %}
             <li><a class='question-title-short' href="{% url 'questions-question_detail' question.id %}">{{ question.title }}</a>
@@ -23,7 +36,7 @@
 
     <div class='users-list'>
     {% if users %}
-        <h2>前10名用户</h2>
+        <h3>新注册用户</h3>
         <ul>
         {% for user in users %}
         <li><a href='{% url 'users-user' user.id %}'>{{ user.username }}</a></li>
@@ -40,14 +53,42 @@
     .questions-list {
         padding: 20px;
         position: relative;
-        top: 50px;
+        margin-top: 3px;
         width: 680px;
+        float: left;
+    }
+    .question-tags {
+        width: 600px;
+        margin-top: 30px;
+        margin-left: auto;
+        margin-right: auto;
+        overflow: hidden;
+    }
+    .all-tags {
+        margin-top: 3px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 600px;
+        overflow: hidden;
+    }
+    .all-tags a {
+        float: right;
+        color: black;
+        text-decoration: underline;
+    }
+    .question-tag {
+        margin-top: 3px;
+        margin-left: 10px;
+        padding: 2px 10px 2px 10px;
+        border-radius: 3px;
+        color: white;
+        background-color: #529ecc;
+        position: relative;
         float: left;
     }
     .users-list {
         padding: 20px 0 20px 0;
         position: relative;
-        top: 50px;
         width: 220px;
         float: right;
     }

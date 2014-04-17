@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, \
                         HttpResponseNotAllowed, HttpResponseForbidden
 from django.template import RequestContext, loader, Context
-from .util import answer_as_json, get_help
+from .util import answer_as_json, get_help, create_tags
 
 from notifications.models import Activity, Notification
 from questions.models import *
@@ -85,11 +85,15 @@ class NewQuestionAjaxView(MyBaseView):
         form = QuestionForm(self.request.POST)
         if form.is_valid():
             title = form.cleaned_data['title']
-            description, asked = get_help(form.cleaned_data['description'])
+            ori_description = form.cleaned_data['description']
+            description, asked = get_help(ori_description)
             question = Question(title=title,
                                 description=description,
                                 asker = self.request.user)
+            tags = create_tags(ori_description)
             question.save()
+            for tag in tags:
+                question.tags.add(tag)
             user = self.request.user
             user_href = reverse('users-user', args=(user.id,))
             question_href = reverse('questions-question_detail', args=(user.id,))
@@ -140,9 +144,9 @@ def vote(request, id):
         user_href = reverse('users-user', args=(user.id,))
         answer_href = reverse('questions-question_detail', args=(answer.question.id,))
         user_tag = \
-                   '<a href="{0}">{1}</a>'.format(user_href, user.username)
+                   u'<a href="{0}">{1}</a>'.format(user_href, user.username)
         answer_tag = \
-                   '<a href="{0}">{1}</a>'.format(answer_href, answer.text)
+                   U'<a href="{0}">{1}</a>'.format(answer_href, answer.text)
         text = u'{0} 赞同 {1}'.format(user_tag, answer_tag)
         activity = Activity(text=text, user=user)
         activity.save()
