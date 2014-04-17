@@ -87,10 +87,10 @@ class NewQuestionAjaxView(MyBaseView):
             title = form.cleaned_data['title']
             ori_description = form.cleaned_data['description']
             description, asked = get_help(ori_description)
+            description, tags = create_tags(description)
             question = Question(title=title,
                                 description=description,
                                 asker = self.request.user)
-            tags = create_tags(ori_description)
             question.save()
             for tag in tags:
                 question.tags.add(tag)

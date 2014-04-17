@@ -58,9 +58,10 @@ def create_tags(text):
     tags = []
     for matched in matches:
         tag_name = matched.groups()[0]
-        try:
-            tag, created = Tag.objects.get_or_create(name=tag_name)
-            tags.append(tag)
-        finally:
-            pass
-    return tags
+        tag, created = Tag.objects.get_or_create(name=tag_name)
+        tags.append(tag)
+        orig = matched.group()
+        tag_label = \
+            u'<a class="question-description-tag" href="{0}">{1}</a>'.format(tag.build_url(), tag.name)
+        text = text.replace(orig, tag_label)
+    return text, tags

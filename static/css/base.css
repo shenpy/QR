@@ -236,3 +236,38 @@
     top: 50px;
     color: white;
 }
+    .question-tags {
+        width: 600px;
+        margin-top: 30px;
+        margin-left: auto;
+        margin-right: auto;
+        overflow: hidden;
+    }
+    .all-tags {
+        margin-top: 3px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 600px;
+        overflow: hidden;
+    }
+    .all-tags a {
+        float: right;
+        color: black;
+        text-decoration: underline;
+    }
+    .question-tag {
+        margin-top: 3px;
+        margin-left: 10px;
+        padding: 2px 10px 2px 10px;
+        border-radius: 3px;
+        color: white;
+        background-color: #529ecc;
+        position: relative;
+        float: left;
+    }
+    .question-description-tag {
+        padding: 2px 10px 2px 10px;
+        border-radius: 3px;
+        color: white;
+        background-color: #529ecc;
+    }
