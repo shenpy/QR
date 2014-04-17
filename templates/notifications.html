@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    消息 | 问答网站
+{% endblock %}
+
+{% block content %}
+
+    <div class='notifications-list'>
+    {% if notifications %}
+        <h2> 您有{{ notifications.count }}条新消息: </h2>
+        <ul>
+        {% for notification in notifications %}
+            <li>{{ notification.text | safe }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <h2> 暂时无新消息</h2>
+    {% endif %}
+    </div>
+
+
+<style type="text/css">
+
+    .notifications-list {
+        padding: 20px;
+        position: relative;
+        top: 50px;
+        width: 680px;
+        float: left;
+    }
+
+</style>
+
+{% endblock %}

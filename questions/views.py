@@ -97,7 +97,7 @@ class NewQuestionAjaxView(MyBaseView):
                        '<a href="{0}">{1}</a>'.format(user_href, user.username)
             question_tag = \
                        '<a href="{0}">{1}</a>'.format(question_href, question.title)
-            text = u'{0} asked a new question: {1}'.format(user_tag, question_tag)
+            text = u'{0} 提出了一个问题: {1}'.format(user_tag, question_tag)
             activity = Activity(text=text, user=user)
             activity.save()
             receivers = set(user.followers.all()).union(asked)
@@ -136,6 +136,20 @@ def vote(request, id):
         vote.save()
         answer = Answer.objects.get(id=id)
         answer_json = answer_as_json(answer)
+        user = request.user
+        user_href = reverse('users-user', args=(user.id,))
+        answer_href = reverse('questions-question_detail', args=(answer.question.id,))
+        user_tag = \
+                   '<a href="{0}">{1}</a>'.format(user_href, user.username)
+        answer_tag = \
+                   '<a href="{0}">{1}</a>'.format(answer_href, answer.text)
+        text = u'{0} 赞同 {1}'.format(user_tag, answer_tag)
+        activity = Activity(text=text, user=user)
+        activity.save()
+        asker = answer.question.asker
+        replyer = answer.replyer
+        receivers = set(user.followers.all()).union([asker, replyer])
+        activity.notify(receivers)
         return HttpResponse(answer_json, mimetype="application/json")
     else:
         return HttpResponseForbidden()

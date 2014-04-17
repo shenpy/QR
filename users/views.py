@@ -7,9 +7,8 @@ from django.template import RequestContext, loader
 from django.views.generic.edit import View, FormView
 
 from users.forms import LoginForm, SignupForm
-
-
 from users.models import User
+from notifications.models import Activity
 
 
 class UserView:
@@ -88,8 +87,20 @@ class SignupView(FormView):
 def follow(request, id):
     user = request.user
     if user.is_authenticated():
+        following = get_object_or_404(User, pk=id)
         user.following.add(id)
         user.save()
+        user_href = reverse('users-user', args=(user.id,))
+        following_href = reverse('users-user', args=(following.id,))
+        user_tag = \
+                   '<a href="{0}">{1}</a>'.format(user_href, user.username)
+        following_tag = \
+                   '<a href="{0}">{1}</a>'.format(following_href, following.username)
+        text = u'{0}关注了{1}'.format(user_tag, following_tag)
+        activity = Activity(text=text, user=user)
+        activity.save()
+        receivers = [following]
+        activity.notify(receivers)
         return HttpResponse()
     else:
         return HttpResponseRedirect(reverse_lazy('users-login'))
