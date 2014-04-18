@@ -118,10 +118,23 @@ class NewAnswerAjaxView(MyBaseView):
     # is     there better way to save answer with its question so i don'r need to get question
     # yep  set foreignkey using integer  '''field_id = kwargs['id']'''
             if answerform.is_valid():
+                user = self.request.user
                 answer = Answer(text=answerform.cleaned_data['text'])
-                answer.replyer = self.request.user
-                answer.question_id = kwargs['id']
+                answer.replyer = user
+                question = Question.objects.get(id=kwargs['id'])
+                answer.question = question
                 answer.save()
+                user_href = reverse('users-user', args=(user.id,))
+                question_href = reverse('questions-question_detail', args=(question.id,))
+                user_tag = \
+                           u'<a href="{0}">{1}</a>'.format(user_href, user.username)
+                question_tag = \
+                           u'<a href="{0}">{1}</a>'.format(question_href, question.title)
+                text = u'{0} 回复了问题: {1}'.format(user_tag, question_tag)
+                activity = Activity(text=text, user=user)
+                activity.save()
+                receivers = set(user.followers.all()).union([question.asker])
+                activity.notify(receivers)
                 answer_json = answer_as_json(answer)
                 return HttpResponse(answer_json, mimetype="application/ddson")
             else:

@@ -59,6 +59,8 @@ def create_tags(text):
     for matched in matches:
         tag_name = matched.groups()[0]
         tag, created = Tag.objects.get_or_create(name=tag_name)
+        if not created:
+            tag.count += 1
         tags.append(tag)
         orig = matched.group()
         tag_label = \

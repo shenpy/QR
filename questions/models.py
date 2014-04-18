@@ -12,7 +12,7 @@ User = get_user_model()
 
 class Tag(models.Model):
     name = models.CharField(max_length=40)
-    count = models.IntegerField(default=0)
+    count = models.IntegerField(default=1)
 
     def __unicode__(self):
         return u"%s" % self.name
