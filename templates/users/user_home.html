@@ -5,21 +5,37 @@
 {% endblock %}
 
 {% block content %}
-
-    <div class='questions-list'>
-    {% if questions %}
-        <h3> 我遇到的一些问题</h3>
+<div class='questions-list'>
+    <div class='questions-ask'>
+    {% if asked_questions %}
+        <h3> 我已提出的问题</h3>
         <ul>
-        {% for question in questions %}
+        {% for question in asked_questions %}
             <li><a class='question-title-short' href="{% url 'questions-question_detail' question.id %}">{{ question.title }}</a>
                 <a class='question-datetime'>{{question.create_date|date:"Y/m/d H:i"}}</a>
             </li>
         {% endfor %}
         </ul>
     {% else %}
-        <h3>你没有发布任何问题！</h3>
+        <h3>你没有提出任何问题！</h3>
     {% endif %}
     </div>
+
+    <div class='questions-reply'>
+        {% if replyed_questions %}
+        <h3> 我回复过的问题</h3>
+        <ul>
+        {% for question in replyed_questions %}
+            <li><a class='question-title-short' href="{% url 'questions-question_detail' question.id %}">{{ question.title }}</a>
+                <a class='question-datetime'>{{question.create_date|date:"Y/m/d H:i"}}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <h3>你没回复任何问题！</h3>
+    {% endif %}
+    </div>
+</div>
 
     <div class='users-list'>
     {% if user.following.all %}
@@ -40,7 +56,6 @@
     .questions-list {
         padding: 20px;
         position: relative;
-        top: 20px;
         width: 680px;
         float: left;
     }
@@ -48,8 +63,22 @@
         padding: 20px 0 20px 0;
         position: relative;
         top: 50px;
-        width: 220px;
+        width: 200px;
+        right: 60px;
         float: right;
+    }
+    .questions-ask {
+        padding: 20px;
+        position: relative;
+        width: 680px;
+        overflow: hidden;
+    }
+    .questions-reply {
+        padding: 20px;
+        position: relative;
+        top: 20px;
+        width: 680px;
+        overflow: hidden;
     }
 </style>
 {% endblock %}

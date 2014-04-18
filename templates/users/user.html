@@ -6,11 +6,12 @@
 
 {% block content %}
 
-    <div class='questions-list'>
-    {% if questions %}
-        <h3>  {{ other.username }} 遇到的一些问题</h3>
+<div class="questions-list">
+    <div class='questions-ask'>
+    {% if asked_questions %}
+        <h3>  {{ other.username }} 已提出的问题</h3>
         <ul>
-        {% for question in questions %}
+        {% for question in asked_questions %}
             <li><a class='question-title-short' href="{% url 'questions-question_detail' question.id %}">{{ question.title }}</a>
                 <a class='question-datetime'>{{question.create_date|date:"Y/m/d H:i"}}</a>
             </li>
@@ -20,6 +21,23 @@
         <p>"{{ other.username }}" has no questions!</p>
     {% endif %}
     </div>
+
+    <div class='questions-reply'>
+    {% if replyed_questions %}
+        <h3>  {{ other.username }} 回复过的问题</h3>
+        <ul>
+        {% for question in replyed_questions %}
+            <li><a class='question-title-short' href="{% url 'questions-question_detail' question.id %}">{{ question.title }}</a>
+                <a class='question-datetime'>{{question.create_date|date:"Y/m/d H:i"}}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>"{{ other.username }}" 没有回复过任何问题</p>
+    {% endif %}
+    </div>
+
+</div>
 
     <div class='users-list'>
     {% if user in other.followers.all %}
@@ -36,15 +54,28 @@
     .questions-list {
         padding: 20px;
         position: relative;
-        top: 20px;
         width: 680px;
         float: left;
+    }
+    .questions-ask {
+        padding: 20px;
+        position: relative;
+        width: 680px;
+        overflow: hidden;
+    }
+    .questions-reply {
+        padding: 20px;
+        position: relative;
+        top: 20px;
+        width: 680px;
+        overflow: hidden;
     }
     .users-list {
         padding: 20px 0 20px 0;
         position: relative;
         top: 50px;
-        width: 220px;
+        width: 200px;
+        right: 60px;
         float: right;
     }
     .relationship {

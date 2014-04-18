@@ -9,6 +9,7 @@ from django.views.generic.edit import View, FormView
 from users.forms import LoginForm, SignupForm
 from users.models import User
 from notifications.models import Activity, Notification
+from questions.models import Answer
 
 
 class ExtraMixin:
@@ -31,10 +32,13 @@ class UserView(ExtraMixin):
             request.user.id == int(kwargs['id']):
             return HttpResponseRedirect(reverse_lazy('users-user_home'))
         user = get_object_or_404(User, pk=kwargs['id'])
-        questions = user.question_set.order_by('create_date')
+        asked_questions = user.question_set.order_by('create_date')
+        answers = Answer.objects.select_related('question').filter(replyer=user)
+        replyed_questions = set(answer.question for answer in answers)
         template = loader.get_template("users/user.html")
         context = RequestContext(request, {
-            'questions': questions,
+            'asked_questions': asked_questions,
+            'replyed_questions': replyed_questions,
             'other': user
 
         })
@@ -48,10 +52,13 @@ class UserHomeView:
         if not request.user.is_authenticated():
             return HttpResponseRedirect(reverse_lazy('users-login'))
         user = request.user
-        questions = user.question_set.order_by('create_date')
+        asked_questions = user.question_set.order_by('create_date')
         template = loader.get_template("users/user_home.html")
+        answers = Answer.objects.select_related('question').filter(replyer=user)
+        replyed_questions = set(answer.question for answer in answers)
         context = RequestContext(request, {
-            'questions': questions,
+            'asked_questions': asked_questions,
+            'replyed_questions': replyed_questions,
             'is_me': True
         })
         return HttpResponse(template.render(context))
