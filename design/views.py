@@ -25,7 +25,7 @@ class IndexView(View):
         else:
             questions = Question.objects.all()[:10]
             tag = None
-            users = User.objects.all()[:10]
+            users = User.objects.all()[:10][::-1]
         tags = Tag.objects.all()[:36]
         return render(request, self.template_name,
                         {'questions': questions,
