@@ -101,7 +101,7 @@
     }
    .question-title-short {
         float: left;
-        width: 470px;
+        width: 400px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -252,6 +252,8 @@
         margin-right: auto;
         width: 600px;
         overflow: hidden;
+        position: relative;
+        right: 25px;
     }
     .all-tags a {
         float: right;
