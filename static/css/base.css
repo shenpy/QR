@@ -61,20 +61,24 @@
         font-weight: bold;
     }
     .userform {
-        top: 120px;
+        top: 60px;
         position : relative;
         width: 320px;
         margin: 0 auto;
         overflow: hidden;
     }
     .userform input {
-        width: 180px;
+        width: 300px;
+        height: 30px;
+        font-size: 25px;
     }
     .userform input[type='submit'] {
-        width: 50px;
+        width: 60px;
+        float: right;
+        font-size: 25px;
     }
     .userform form {
-        width: 184px;
+        width: 304px;
         margin: 0 auto;
     }
     .errorlist li {
@@ -82,7 +86,6 @@
     }
     form input {
         margin-bottom: 5px;
-        float:right;
     }
     .datetime {
         color: gray;
@@ -165,6 +168,7 @@
         height: 30px;
         color: white;
         font-size: 20px;
+        float: right;
     }
     #modal input[type="submit"]:active {
         background-color: #168391;

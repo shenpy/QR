@@ -9,16 +9,16 @@ User = auth.get_user_model()
 
 class LoginForm(forms.Form):
     username = forms.CharField(
-        error_messages={'required': 'please input your Username'},
+        error_messages={'required': u'请输入用户名'},
         label='',
-        widget=forms.TextInput(attrs={'placeholder': 'username'}),
+        widget=forms.TextInput(attrs={'placeholder': u'用户名'}),
         max_length=30,
         required=True,
     )
     password = forms.CharField(
-        error_messages={'required': 'please input your Password'},
+        error_messages={'required': u'请输入密码'},
         label='',
-        widget=forms.PasswordInput(attrs={'placeholder': 'password'}),
+        widget=forms.PasswordInput(attrs={'placeholder': '密码'}),
         required=True,
     )
 
@@ -30,7 +30,7 @@ class LoginForm(forms.Form):
         try:
             u = User.objects.get(username=username)
         except ObjectDoesNotExist:
-            raise forms.ValidationError('user "%s" not exist' % username)
+            raise forms.ValidationError(u'用户"%s"不存在' % username)
         else:
             if u.check_password(password):
                 user = auth.authenticate(**self.cleaned_data)
@@ -38,9 +38,9 @@ class LoginForm(forms.Form):
                     self.user = user
                     return self.cleaned_data
                 else:
-                    raise forms.ValidationError('validate error,try later')
+                    raise forms.ValidationError(u'服务器异常，稍后再试')
             else:
-                raise forms.ValidationError('password not correct')
+                raise forms.ValidationError(u'密码错误')
 
 
 class SignupForm(forms.Form):
@@ -48,29 +48,29 @@ class SignupForm(forms.Form):
         label='',
         max_length=30,
         required=True,
-        error_messages={'required': 'Username is Required'},
+        error_messages={'required': u'用户名必须填写'},
         widget=forms.TextInput(attrs={'autocomplete':'off',
-                                      'placeholder': 'username'})
+                                      'placeholder': u'用户名'})
     )
     password = forms.CharField(
         label='',
         required=True,
-        error_messages={'required': 'Password is Required'},
+        error_messages={'required': u'请输入密码'},
         widget=forms.PasswordInput(attrs={'autocomplete':'off',
-                                          'placeholder': 'password'})
+                                          'placeholder': u'密码'})
     )
     password_confirm = forms.CharField(
         label='',
         required=True,
-        error_messages={'required': 'Confirm your password'},
+        error_messages={'required': u'请再次输入密码'},
         widget=forms.PasswordInput(attrs={'autocomplete':'off',
-                                          'placeholder': 'confirm password'})
+                                          'placeholder': u'确认密码'})
     )
     email = forms.EmailField(
         label='',
-        widget=forms.TextInput(attrs={'placeholder': 'email'}),
-        error_messages={'required': 'Email is required',
-                        'invalid': 'Email format invalid'}
+        widget=forms.TextInput(attrs={'placeholder': u'邮箱'}),
+        error_messages={'required': u'请输入邮箱',
+                        'invalid': u'邮箱格式错误'}
     )
 
     def clean_username(self):
@@ -82,8 +82,7 @@ class SignupForm(forms.Form):
         except ObjectDoesNotExist:
             pass
         else:
-            print 'already exsit'
-            raise forms.ValidationError('user "%s" already exists' \
+            raise forms.ValidationError(u'用户名"%s"已经存在' \
                                             % username)
         return username
 
@@ -91,8 +90,7 @@ class SignupForm(forms.Form):
         password = self.cleaned_data.get('password')
         password_confirm = self.cleaned_data['password_confirm']
         if password!=password_confirm:
-            print 'two input password not the same'
-            raise forms.ValidationError('two input password not the same')
+            raise forms.ValidationError(u'两次密码输入不一致')
         return password_confirm
 
     def clean(self):
