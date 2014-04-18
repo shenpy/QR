@@ -98,9 +98,9 @@ class NewQuestionAjaxView(MyBaseView):
             user_href = reverse('users-user', args=(user.id,))
             question_href = reverse('questions-question_detail', args=(question.id,))
             user_tag = \
-                       '<a href="{0}">{1}</a>'.format(user_href, user.username)
+                       u'<a href="{0}">{1}</a>'.format(user_href, user.username)
             question_tag = \
-                       '<a href="{0}">{1}</a>'.format(question_href, question.title)
+                       u'<a href="{0}">{1}</a>'.format(question_href, question.title)
             text = u'{0} 提出了一个问题: {1}'.format(user_tag, question_tag)
             activity = Activity(text=text, user=user)
             activity.save()
@@ -146,7 +146,7 @@ def vote(request, id):
         user_tag = \
                    u'<a href="{0}">{1}</a>'.format(user_href, user.username)
         answer_tag = \
-                   U'<a href="{0}">{1}</a>'.format(answer_href, answer.text)
+                   u'<a href="{0}">{1}</a>'.format(answer_href, answer.text)
         text = u'{0} 赞同 {1}'.format(user_tag, answer_tag)
         activity = Activity(text=text, user=user)
         activity.save()
